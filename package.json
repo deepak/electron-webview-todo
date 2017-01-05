@@ -1,0 +1,58 @@
+{
+  "name": "electron-webview-todo",
+  "productName": "electron-webview-todo",
+  "version": "0.0.1",
+  "description": "Desktop app using Electron which bundles a React App written in ES6 + React + Redux + Webpack + CSS Modules",
+  "main": "src/main-process/main.js",
+  "scripts": {
+    "start": "DEBUG=* electron-forge start --enable-logging",
+    "lint": "eslint src"
+  },
+  "config": {
+    "forge": {
+      "make_targets": {
+        "win32": [
+          "squirrel"
+        ],
+        "darwin": [
+          "zip"
+        ],
+        "linux": [
+          "deb",
+          "rpm"
+        ]
+      },
+      "electronPackagerConfig": {},
+      "electronWinstallerConfig": {
+        "name": "electron-webview-todo"
+      },
+      "electronInstallerDebian": {},
+      "electronInstallerRedhat": {},
+      "github_repository": {
+        "owner": "",
+        "name": ""
+      }
+    }
+  },
+  "dependencies": {
+    "electron-compile": "^5.1.2"
+  },
+  "devDependencies": {
+    "babel-preset-stage-0": "^6.16.0",
+    "electron-prebuilt-compile": "1.4.13",
+    "eslint": "^3.12.2",
+    "eslint-config-airbnb": "^13.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.8.0"
+  },
+  "keywords": [
+    "ES6",
+    "react",
+    "redux",
+    "electron"
+  ],
+  "private": true,
+  "license": "MIT",
+  "author": "Deepak Kannan"
+}

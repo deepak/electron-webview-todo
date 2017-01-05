@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- These meta tags come first. -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+
+    <title>TODO</title>
+    <link rel="stylesheet" href="./index.css">
+  </head>
+  <body>
+    <div class="indicator">Loading</div>
+    <webview
+      id="todo-app"
+      src="http://0.0.0.0:3000/">
+    </webview>
+
+    <script>
+     (() => {
+       console.log("===> starting");
+       const fs = require('fs');
+
+       const webview = document.getElementById('todo-app')
+       const indicator = document.querySelector('.indicator')
+
+       webview.addEventListener('did-stop-loading', () => {
+         console.log("==> did-stop-loading");
+         indicator.classList.add('hide');
+       })
+     })();
+    </script>
+  </body>
+</html>
