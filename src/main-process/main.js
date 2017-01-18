@@ -2,9 +2,12 @@
 
 // app: Module to control application life.
 // BrowserWindow: Module to create native browser window.
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import path from 'path';
 import url from 'url';
+
+const http = require("http");
+const port = 8080;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -69,7 +72,24 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 
-ipcMain.on('ping', (event, arg) => {
-  console.log("in main process, pinged with: ", arg);  // prints "ping"
-  event.sender.send('ping-reply', 'pong');
-});
+http.createServer(function(request, response) {
+  // Set CORS headers
+	response.setHeader('Access-Control-Allow-Origin', '*');
+	response.setHeader('Access-Control-Request-Method', '*');
+	response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+	response.setHeader('Access-Control-Allow-Headers', '*');
+
+	if (request.method === 'OPTIONS' ) {
+    response.writeHead(200);
+	  response.end();
+	} else {
+    response.writeHead(200, {
+      'Content-Type': 'application/json'
+    });
+    setTimeout(() => {
+      response.end(JSON.stringify({ message: 'test' }));
+    }, 2000);
+  }
+}).listen(port);
+
+console.log("Static file server running at\n  => http://localhost:" + port + "/\nCTRL + C to shutdown");
