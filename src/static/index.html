@@ -12,7 +12,8 @@
     <div class="indicator">Loading</div>
     <webview
       id="todo-app"
-      src="http://0.0.0.0:3000/">
+      src="http://0.0.0.0:3000/"
+      nodeintegration>
     </webview>
 
     <script>
@@ -23,11 +24,23 @@
        const webview = document.getElementById('todo-app')
        const indicator = document.querySelector('.indicator')
 
+       console.log("===> webview is: ", webview);
+
        webview.addEventListener('did-stop-loading', () => {
          console.log("==> did-stop-loading");
          indicator.classList.add('hide');
        })
-     })();
+
+       webview.addEventListener('ipc-message', (event) => {
+         console.log("===> reveived ipc-message");
+         console.log(event.channel)
+         // Prints "pong"
+       })
+
+       webview.addEventListener("dom-ready", function() {
+         webview.openDevTools();
+       });
+      })();
     </script>
   </body>
 </html>
