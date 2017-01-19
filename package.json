@@ -5,7 +5,7 @@
   "description": "Desktop app using Electron which bundles a React App written in ES6 + React + Redux + Webpack + CSS Modules",
   "main": "src/main-process/main.js",
   "scripts": {
-    "start": "DEBUG=* electron-forge start --enable-logging",
+    "start": "cross-env DEBUG=* electron-forge start --enable-logging",
     "lint": "eslint src"
   },
   "config": {
@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "babel-preset-stage-0": "^6.16.0",
+    "cross-env": "^3.1.4",
     "electron-prebuilt-compile": "1.4.13",
     "eslint": "^3.12.2",
     "eslint-config-airbnb": "^13.0.0",
