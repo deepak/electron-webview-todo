@@ -39,6 +39,8 @@ function createWindow() {
     slashes: true
   }));
 
+  mainWindow.openDevTools();
+
   mainWindow.once('ready-to-show', () => {
     // console.log("===> ready to show"); // DEBUG
     mainWindow.show();
