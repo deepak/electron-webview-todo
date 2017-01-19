@@ -2,9 +2,10 @@
 
 // app: Module to control application life.
 // BrowserWindow: Module to create native browser window.
-import { app, BrowserWindow } from 'electron';
-import path from 'path';
-import url from 'url';
+const app = require('electron').app;
+const BrowserWindow = require('electron').BrowserWindow;
+const path = require('path');
+const url = require('url');
 
 const http = require("http");
 const port = 8080;

@@ -1,56 +1,22 @@
 {
   "name": "electron-webview-todo",
-  "productName": "electron-webview-todo",
   "version": "0.0.1",
   "description": "Desktop app using Electron which bundles a React App written in ES6 + React + Redux + Webpack + CSS Modules",
   "main": "src/main-process/main.js",
   "scripts": {
-    "start": "cross-env DEBUG=* electron-forge start --enable-logging",
+    "start": "cross-env DEBUG=* electron . --enable-logging",
     "lint": "eslint src",
-    "package": "electron-forge package",
-    "package:win32": "electron-forge package --platform=win32 --arch=ia32",
-    "package:win64": "electron-forge package --platform=win32 --arch=x64",
-    "package:osx": "electron-forge package --platform=mas --arch=x64"
-  },
-  "config": {
-    "forge": {
-      "make_targets": {
-        "win32": [
-          "squirrel"
-        ],
-        "darwin": [
-          "zip"
-        ],
-        "linux": [
-          "deb",
-          "rpm"
-        ]
-      },
-      "electronPackagerConfig": {},
-      "electronWinstallerConfig": {
-        "name": "electron-webview-todo"
-      },
-      "electronInstallerDebian": {},
-      "electronInstallerRedhat": {},
-      "github_repository": {
-        "owner": "",
-        "name": ""
-      }
-    }
-  },
-  "dependencies": {
-    "electron-compile": "^5.1.2"
+    "package": "electron-packager . --out=dist --asar --overwrite --all",
+    "package:win32": "electron-packager . --out=dist --asar --overwrite --platform=win32 --arch=ia32",
+    "package:win64": "electron-packager . --out=dist --asar --overwrite --platform=win32 --arch=x64",
+    "package:osx": "electron-packager . --out=dist --asar --overwrite --platform=mas --arch=x64"
   },
   "devDependencies": {
-    "babel-preset-stage-0": "^6.16.0",
     "cross-env": "^3.1.4",
-    "electron-prebuilt-compile": "1.4.13",
-    "eslint": "^3.12.2",
-    "eslint-config-airbnb": "^13.0.0",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^2.2.3",
-    "eslint-plugin-react": "^6.8.0"
+    "electron": "^1.4.13",
+    "electron-packager": "^8.4.0"
   },
+  "repository": "https://github.com/deepak/electron-webview-todo",
   "keywords": [
     "ES6",
     "react",
