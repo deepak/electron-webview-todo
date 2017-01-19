@@ -9,6 +9,7 @@ import url from 'url';
 const http = require("http");
 const port = 8080;
 
+const outputFolder = path.join(app.getPath('userData'), "outputs");
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow = null;
@@ -87,6 +88,8 @@ http.createServer(function(request, response) {
       'Content-Type': 'application/json'
     });
     setTimeout(() => {
+      outputFolder = path.join(userDataPath, "outputs")
+
       response.end(JSON.stringify({ message: 'test' }));
     }, 2000);
   }
