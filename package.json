@@ -6,7 +6,11 @@
   "main": "src/main-process/main.js",
   "scripts": {
     "start": "cross-env DEBUG=* electron-forge start --enable-logging",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "package": "electron-forge package",
+    "package:win32": "electron-forge package --platform=win32 --arch=ia32",
+    "package:win64": "electron-forge package --platform=win32 --arch=x64",
+    "package:osx": "electron-forge package --platform=mas --arch=x64"
   },
   "config": {
     "forge": {
