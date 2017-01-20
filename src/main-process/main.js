@@ -6,11 +6,12 @@ import { app, BrowserWindow } from 'electron';
 import path from 'path';
 import url from 'url';
 import isRunningInAsar from 'electron-is-running-in-asar';
+import scraper from './scraper';
 
 const http = require("http");
 const port = 8080;
 
-const outputFolder = path.join(app.getPath('userData'), "outputs");
+const outputPath = path.join(app.getPath('userData'), "outputs");
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow = null;
@@ -91,8 +92,7 @@ http.createServer(function(request, response) {
       'Content-Type': 'application/json'
     });
     setTimeout(() => {
-      outputFolder = path.join(userDataPath, "outputs")
-
+      console.log("type of scraper is: ", scraper());
       response.end(JSON.stringify({ message: 'test' }));
     }, 2000);
   }
