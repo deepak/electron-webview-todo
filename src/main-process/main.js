@@ -90,8 +90,6 @@ http.createServer(function(request, response) {
       'Content-Type': 'application/json'
     });
     setTimeout(() => {
-      outputFolder = path.join(userDataPath, "outputs")
-
       response.end(JSON.stringify({ message: 'test' }));
     }, 2000);
   }
