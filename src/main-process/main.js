@@ -5,6 +5,7 @@
 import { app, BrowserWindow } from 'electron';
 import path from 'path';
 import url from 'url';
+import isRunningInAsar from 'electron-is-running-in-asar';
 
 const http = require("http");
 const port = 8080;
@@ -98,3 +99,8 @@ http.createServer(function(request, response) {
 }).listen(port);
 
 console.log("Static file server running at\n  => http://localhost:" + port + "/\nCTRL + C to shutdown");
+
+console.log("electron filename is: ", process.mainModule.filename);
+if (isRunningInAsar()) {
+  console.log('Running the app from inside an asar package!');
+}

@@ -39,7 +39,8 @@
     }
   },
   "dependencies": {
-    "electron-compile": "^5.1.2"
+    "electron-compile": "^5.1.2",
+    "electron-is-running-in-asar": "^1.0.0"
   },
   "devDependencies": {
     "babel-preset-stage-0": "^6.16.0",
