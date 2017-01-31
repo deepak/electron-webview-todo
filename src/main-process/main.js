@@ -81,9 +81,17 @@ function scrapeOnWindows(scraperPath) {
   const casperPath = path.join(__dirname, "../casperjs/batchbin/casperjs.bat");
   console.log(`===> outputPath: ${outputPath}`);
   console.log(`===> casperPath: ${casperPath}`);
-  const bat = spawn(`"${casperPath}"`, [scraperPath, "--url=https://www.google.co.in", `--outputPath=${outputPath}`], {
-    shell: true
-  });
+  const bat = spawn(
+    `"${casperPath}"`,
+    [
+      scraperPath,
+      "--url=https://www.google.co.in",
+      `--outputPath=${outputPath}`
+    ],
+    {
+      shell: true
+    }
+  );
 
   const stdoutDecoder = new StringDecoder('utf8');
   const stderrDecoder = new StringDecoder('utf8');
@@ -106,11 +114,14 @@ function scrapeOnWindows(scraperPath) {
 function scrapeOnDarwin(scraperPath) {
   const outputPath = path.join(app.getPath('userData'), "outputs");
   console.log(`===> outputPath: ${outputPath}`);
-  const bat = spawn("casperjs", [
-    scraperPath,
-    "--url=https://www.google.co.in",
-    `--outputPath=${outputPath}`
-  ]);
+  const bat = spawn(
+    "casperjs",
+    [
+      scraperPath,
+      "--url=https://www.google.co.in",
+      `--outputPath=${outputPath}`
+    ]
+  );
 
   const stdoutDecoder = new StringDecoder('utf8');
   const stderrDecoder = new StringDecoder('utf8');
