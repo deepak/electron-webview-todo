@@ -5,6 +5,7 @@
 import { app, BrowserWindow } from 'electron';
 import path from 'path';
 import url from 'url';
+import { readFile, writeFile } from 'fs';
 import { spawn } from 'child_process';
 import { StringDecoder } from 'string_decoder';
 import chokidar from 'chokidar';
@@ -166,6 +167,8 @@ http.createServer(function(request, response) {
 
     const outputPath = path.join(app.getPath('userData'), "outputs");
     const captureFile = outputPath + '/captcha.png';
+    const captchaResultFile = outputPath + '/captcha.txt';
+    const resultsFile = outputPath + '/results.json';
 
     if (request.method === 'GET' ) {
       const scraperPath = path.join(__dirname, "../scrapers/cscrape.js");
@@ -191,6 +194,23 @@ http.createServer(function(request, response) {
           });
         });
     } else {
+      writeFile(captchaResultFile, "1234", (err) => {
+        if (err) { console.log(err); }
+
+        const watcher = chokidar
+              .watch(resultsFile);
+        watcher
+          .on('add', () => {
+            console.log("result captured");
+
+            readFile(resultsFile, 'utf8', (err, data) => {
+              if (err) { console.log(err); }
+
+              response.end(data);
+              watcher.close();
+            });
+          });
+      });
     }
   }
 }).listen(port);
