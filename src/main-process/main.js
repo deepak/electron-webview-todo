@@ -7,6 +7,8 @@ import path from 'path';
 import url from 'url';
 import { spawn } from 'child_process';
 import { StringDecoder } from 'string_decoder';
+import chokidar from 'chokidar';
+import { encode } from 'node-base64-image'; // ES6
 
 const http = require("http");
 const port = 8080;
@@ -76,8 +78,7 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 
-function scrapeOnWindows(scraperPath) {
-  const outputPath = path.join(app.getPath('userData'), "outputs");
+function scrapeOnWindows(scraperPath, outputPath) {
   const casperPath = path.join(__dirname, "../casperjs/batchbin/casperjs.bat");
   console.log(`===> outputPath: ${outputPath}`);
   console.log(`===> casperPath: ${casperPath}`);
@@ -111,8 +112,7 @@ function scrapeOnWindows(scraperPath) {
   });
 }
 
-function scrapeOnDarwin(scraperPath) {
-  const outputPath = path.join(app.getPath('userData'), "outputs");
+function scrapeOnDarwin(scraperPath, outputPath) {
   console.log(`===> outputPath: ${outputPath}`);
   const bat = spawn(
     "casperjs",
@@ -141,11 +141,11 @@ function scrapeOnDarwin(scraperPath) {
   });
 }
 
-function scrape(scraperPath) {
+function scrape(scraperPath, outputPath) {
   if (process.platform === 'darwin') {
-    scrapeOnDarwin(scraperPath);
+    scrapeOnDarwin(scraperPath, outputPath);
   } else {
-    scrapeOnWindows(scraperPath);
+    scrapeOnWindows(scraperPath, outputPath);
   }
 }
 
@@ -164,12 +164,34 @@ http.createServer(function(request, response) {
       'Content-Type': 'application/json'
     });
 
-    const scraperPath = "scrapers/cscrape.js";
-    scrape(scraperPath);
+    const outputPath = path.join(app.getPath('userData'), "outputs");
+    const captureFile = outputPath + '/captcha.png';
 
-    setTimeout(() => {
-      response.end(JSON.stringify({ message: 'test' }));
-    }, 2000);
+    if (request.method === 'GET' ) {
+      const scraperPath = path.join(__dirname, "../scrapers/cscrape.js");
+      scrape(scraperPath, outputPath);
+
+      const watcher = chokidar
+            .watch(captureFile);
+
+      watcher
+        .on('add', () => {
+          console.log("captcha captured");
+
+          encode(captureFile, {
+            local: true,
+            string: true
+          }, function (err, image) {
+            if (err) { console.log(err); }
+
+            response.end(JSON.stringify({
+              image: `data:image/png;base64,${image}`
+            }));
+            watcher.close();
+          });
+        });
+    } else {
+    }
   }
 }).listen(port);
 

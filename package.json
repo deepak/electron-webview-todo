@@ -39,7 +39,9 @@
     }
   },
   "dependencies": {
-    "electron-compile": "^5.1.2"
+    "chokidar": "^1.6.1",
+    "electron-compile": "^5.1.2",
+    "node-base64-image": "^1.0.3"
   },
   "devDependencies": {
     "babel-preset-stage-0": "^6.16.0",

@@ -14,6 +14,7 @@ if(!casper.cli.has('outputPath')) {
 
 var url = casper.cli.get('url');
 var outputPath = casper.cli.get('outputPath');
+const captureFile = outputPath + '/captcha.png';
 const captchaResultFile = outputPath + "/captcha.txt";
 const resultsFile = outputPath + "/results.json";
 var timer = 45;
@@ -29,7 +30,6 @@ casper.start(url, function() {
 });
 
 casper.then(function () {
-  const captureFile = outputPath + '/example.png';
   casper.capture(captureFile);
   console.log("captured file at: ", captureFile);
 });
