@@ -81,7 +81,9 @@ function scrapeOnWindows(scraperPath) {
   const casperPath = path.join(__dirname, "../casperjs/batchbin/casperjs.bat");
   console.log(`===> outputPath: ${outputPath}`);
   console.log(`===> casperPath: ${casperPath}`);
-  const bat = spawn('cmd.exe', ['/c', `${casperPath} ${scraperPath} --url=https://www.google.co.in --outputPath=${outputPath}` ]);
+  const bat = spawn(`"${casperPath}"`, [scraperPath, "--url=https://www.google.co.in", `--outputPath=${outputPath}`], {
+    shell: true
+  });
 
   const stdoutDecoder = new StringDecoder('utf8');
   const stderrDecoder = new StringDecoder('utf8');
@@ -151,7 +153,7 @@ http.createServer(function(request, response) {
       'Content-Type': 'application/json'
     });
 
-    const scraperPath = path.join(__dirname, "../scrapers/cscrape.js");
+    const scraperPath = "scrapers/cscrape.js";
     scrape(scraperPath);
 
     setTimeout(() => {
