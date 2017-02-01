@@ -79,7 +79,7 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 
-function scrapeOnWindows(scraperPath, outputPath) {
+function scrapeOnWindows(scraperPath, outputPath, urlToScrape) {
   const casperPath = path.join(__dirname, "../casperjs/batchbin/casperjs.bat");
   console.log(`===> outputPath: ${outputPath}`);
   console.log(`===> casperPath: ${casperPath}`);
@@ -87,7 +87,7 @@ function scrapeOnWindows(scraperPath, outputPath) {
     `"${casperPath}"`,
     [
       `"${scraperPath}"`,
-      "--url=https://www.google.co.in",
+      `--url=${urlToScrape}`,
       `--outputPath=${outputPath}`
     ],
     {
@@ -113,13 +113,13 @@ function scrapeOnWindows(scraperPath, outputPath) {
   });
 }
 
-function scrapeOnDarwin(scraperPath, outputPath) {
+function scrapeOnDarwin(scraperPath, outputPath, urlToScrape) {
   console.log(`===> outputPath: ${outputPath}`);
   const bat = spawn(
     "casperjs",
     [
       scraperPath,
-      "--url=https://www.google.co.in",
+      `--url=${urlToScrape}`,
       `--outputPath=${outputPath}`
     ]
   );
@@ -142,11 +142,11 @@ function scrapeOnDarwin(scraperPath, outputPath) {
   });
 }
 
-function scrape(scraperPath, outputPath) {
+function scrape(scraperPath, outputPath, urlToScrape) {
   if (process.platform === 'darwin') {
-    scrapeOnDarwin(scraperPath, outputPath);
+    scrapeOnDarwin(scraperPath, outputPath, urlToScrape);
   } else {
-    scrapeOnWindows(scraperPath, outputPath);
+    scrapeOnWindows(scraperPath, outputPath, urlToScrape);
   }
 }
 
@@ -171,8 +171,10 @@ http.createServer(function(request, response) {
     const resultsFile = outputPath + '/results.json';
 
     if (request.method === 'GET' ) {
+      const urlToScrape = url.parse(request.url, true).query.url;
+      console.log(`===> urlToScrape: ${urlToScrape}`);
       const scraperPath = path.join(__dirname, "../scrapers/cscrape.js");
-      scrape(scraperPath, outputPath);
+      scrape(scraperPath, outputPath, urlToScrape);
 
       const watcher = chokidar
             .watch(captureFile);
@@ -194,7 +196,10 @@ http.createServer(function(request, response) {
           });
         });
     } else {
-      writeFile(captchaResultFile, "1234", (err) => {
+      const userCaptcha = url.parse(request.url, true).query.captcha;
+      console.log(`===> userCaptcha: ${userCaptcha}`);
+
+      writeFile(captchaResultFile, userCaptcha, (err) => {
         if (err) { console.log(err); }
 
         const watcher = chokidar
@@ -205,8 +210,10 @@ http.createServer(function(request, response) {
 
             readFile(resultsFile, 'utf8', (err, data) => {
               if (err) { console.log(err); }
-
-              response.end(data);
+              const results = Object.assign({}, JSON.parse(data), {
+                outputPath: outputPath
+              });
+              response.end(JSON.stringify(results));
               watcher.close();
             });
           });
