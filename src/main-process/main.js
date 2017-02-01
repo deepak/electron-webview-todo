@@ -86,7 +86,7 @@ function scrapeOnWindows(scraperPath, outputPath) {
   const bat = spawn(
     `"${casperPath}"`,
     [
-      scraperPath,
+      `"${scraperPath}"`,
       "--url=https://www.google.co.in",
       `--outputPath=${outputPath}`
     ],
